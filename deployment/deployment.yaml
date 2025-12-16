@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ${APP_NAME}-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ${APP_NAME}
+  template:
+    metadata:
+      labels:
+        app: ${APP_NAME}
+    spec:
+      containers:
+      - name: ${APP_NAME}
+        # The placeholder that Ansible will replace with the secured image tag
+        image: ${IMAGE_TAG}
+        ports:
+        - containerPort: 8080

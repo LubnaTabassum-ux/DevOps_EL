@@ -1,0 +1,43 @@
+---
+# deployment/playbook.yaml
+- name: Deploy Secure Docker Image to Kubernetes
+  hosts: localhost # Run the playbook on the Jenkins agent
+  connection: local
+  vars:
+    # These variables will be passed by the Jenkins pipeline
+    app_name: "{{ lookup('env', 'APP_NAME') }}"
+    image_tag: "{{ lookup('env', 'IMAGE_TAG') }}"
+    kube_config_file: "~/.kube/config"
+
+  tasks:
+    - name: Ensure Kubectl is accessible
+      command: kubectl cluster-info
+      register: kube_check
+      changed_when: false
+      failed_when: kube_check.rc != 0
+      
+    - name: Substitute image tag in Kubernetes manifest
+      # Ansible's 'template' module (Jinja2) is the best practice for this (Unit IV)
+      template:
+        src: deployment.yaml.j2 # Rename your manifest file to a template (.j2)
+        dest: /tmp/deployment-rendered.yaml
+      vars:
+        # Variables used inside deployment.yaml.j2
+        APP_NAME: "{{ app_name }}"
+        IMAGE_TAG: "{{ image_tag }}"
+
+    - name: Apply Kubernetes Deployment and Service
+      # Use the 'kubernetes.core.k8s' module for clean, declarative Kubernetes management
+      kubernetes.core.k8s:
+        state: present
+        src: /tmp/deployment-rendered.yaml
+        kubeconfig: "{{ kube_config_file }}"
+        
+    - name: Wait for deployment to be ready (Validation)
+      kubernetes.core.k8s_info:
+        api_version: apps/v1
+        kind: Deployment
+        name: "{{ app_name }}-deployment"
+        namespace: default
+        wait: true
+        wait_timeout: 300 # Wait up to 5 minutes
