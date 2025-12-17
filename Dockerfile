@@ -13,6 +13,6 @@ WORKDIR /app
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 USER appuser
 # Copy only the compiled artifact from the builder stage
-COPY --from=builder /app/dist /app/dist # Adjust path based on your app's build output
+COPY --from=builder /app/dist /app/dist
 EXPOSE 8080
 CMD ["node", "/app/dist/server.js"]
