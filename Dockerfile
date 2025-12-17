@@ -1,18 +1,20 @@
-# Stage 1: The Builder (Uses a full environment for building the artifact)
+# Stage 1: The Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY src/package*.json ./
 RUN npm install
 COPY src/ .
-RUN npm run build --if-present # Example: If you have a build step
 
-# Stage 2: The Final, Minimal Image (Only required runtime and artifact)
-FROM node:20-slim
+# Stage 2: The Final, Minimal Image
+FROM node:20-alpine
 WORKDIR /app
-# Best Practice: Run as a non-root user (Unit I)
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Alpine specific user creation
+RUN addgroup -S appuser && adduser -S appuser -G appuser
 USER appuser
-# Copy only the compiled artifact from the builder stage
+
+# Copy from builder
 COPY --from=builder /app /app
+
 EXPOSE 8080
 CMD ["node", "index.js"]
