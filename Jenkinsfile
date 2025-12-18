@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     sh "ansible-galaxy collection install kubernetes.core"
-                    // We tell Ansible exactly where the K8s ID card is
+                    // Pointing directly to our new 'standalone' config
                     withEnv([
                         "IMAGE_TAG=${imageName}", 
                         "APP_NAME=${appName}",
