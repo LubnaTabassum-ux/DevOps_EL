@@ -1,4 +1,6 @@
 Automated Secure Image Builder
+
+
 This project implements a production-grade DevSecOps Pipeline that automates the lifecycle of a secure Node.js application, integrating automated building, security auditing, and Infrastructure-as-Code (IaC) deployment.
 Architecture Overview
 The pipeline ensures that every code change undergoes a rigorous security and validation process before reaching the production cluster.
