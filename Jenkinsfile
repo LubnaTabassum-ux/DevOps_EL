@@ -53,13 +53,18 @@ pipeline {
         stage('5. Deployment Trigger (Ansible)') {
             steps {
                 script {
+                    // 1. Ensure the Ansible collection is there
                     sh "ansible-galaxy collection install kubernetes.core"
-                    // Pointing directly to our new 'standalone' config
+                    
+                    // 2. Ensure the Python library is there
+                    sh "pip install kubernetes --break-system-packages || echo 'Pip install failed, hoping system package exists'"
+
                     withEnv([
                         "IMAGE_TAG=${imageName}", 
                         "APP_NAME=${appName}",
                         "KUBECONFIG=/var/lib/jenkins/.kube/config"
                     ]) {
+                        // 3. Run the playbook
                         sh "ansible-playbook deployment/playbook.yaml -i localhost,"
                     }
                 }
