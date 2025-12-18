@@ -6,6 +6,7 @@ Architecture Overview
 The pipeline ensures that every code change undergoes a rigorous security and validation process before reaching the production cluster.
 
 Key Features
+
 -->Shift-Left Security: Integrated Trivy scanning to identify vulnerabilities before the deployment phase.
 
 -->Multi-Stage Docker Builds: Utilizes Alpine Linux to minimize image size and drastically reduce the security attack surface.
