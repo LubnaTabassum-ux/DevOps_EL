@@ -32,7 +32,10 @@ Pipeline Stages (The Workflow)
 3. Vulnerability Scanning: Executes Trivy to audit the image for HIGH and CRITICAL vulnerabilities; results are archived as JSON artifacts.
 4. Push to Registry: Authenticates with Docker Hub using encrypted credentials and pushes the verified image.
 5. Ansible Deployment:
+   
      -->Templating: Renders Kubernetes manifests dynamically using Jinja2 (deployment.yaml.j2).
+   
      -->Authentication: Connects via a standalone "flattened" Kubeconfig for secure access.
+   
      -->Desired State: Deploys 2 replicas of the app in the default namespace.
 6. Validation: Runs kubectl checks to verify pod health and service availability.
