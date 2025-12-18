@@ -4,6 +4,7 @@ Automated Secure Image Builder
 This project implements a production-grade DevSecOps Pipeline that automates the lifecycle of a secure Node.js application, integrating automated building, security auditing, and Infrastructure-as-Code (IaC) deployment.
 Architecture Overview
 The pipeline ensures that every code change undergoes a rigorous security and validation process before reaching the production cluster.
+
 Key Features
 -->Shift-Left Security: Integrated Trivy scanning to identify vulnerabilities before the deployment phase.
 
@@ -14,6 +15,7 @@ Key Features
 -->Infrastructure as Code (IaC): Leverages Ansible and Jinja2 templates for declarative, repeatable Kubernetes management.
 
 -->Zero-Downtime Strategy: Utilizes Kubernetes' native Rolling Updates to ensure the application remains available during new version rollouts.
+
 Technology Stack
 Layer                  Technology
 CI/CD Orchestrator     Jenkins
