@@ -51,12 +51,15 @@ pipeline {
         }
 
         stage('5. Deployment Trigger (Ansible)') {
-            when { expression { return currentBuild.result != 'FAILURE' } }
             steps {
                 script {
                     sh "ansible-galaxy collection install kubernetes.core"
-                    withEnv(["IMAGE_TAG=${imageName}", "APP_NAME=${appName}"]) {
-                        // Ensure the deployment directory exists in your repo
+                    // We tell Ansible exactly where the K8s ID card is
+                    withEnv([
+                        "IMAGE_TAG=${imageName}", 
+                        "APP_NAME=${appName}",
+                        "KUBECONFIG=/var/lib/jenkins/.kube/config"
+                    ]) {
                         sh "ansible-playbook deployment/playbook.yaml -i localhost,"
                     }
                 }
